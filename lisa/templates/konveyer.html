@@ -100,11 +100,11 @@
               <div class="input-item">
                 <label for="education">Ma‘lumoti</label>
                 <select name="education" id="education" style="font-size: 25px;">
-                  <option value="Oliy">Oliy</option>
-                  <option value="O‘rta">O‘rta</option>
-                  <option value="O‘rta-maxsus">O‘rta-maxsus</option>
-                  <option value="Tuganlanmagan oliy">Tuganlanmagan oliy</option>
-                  <option value="Boshlang‘ich">Boshlang‘ich</option>
+                  <option value="1">Oliy</option>
+                  <option value="2">O‘rta</option>
+                  <option value="3">O‘rta-maxsus</option>
+                  <option value="4">Tuganlanmagan oliy</option>
+                  <option value="5">Boshlang‘ich</option>
                 </select>
               </div>
             </div>
@@ -319,7 +319,7 @@
     <div class="tab" id="yakun">
           <div class="fiveth-tab">
             <div class="second-tab-data">
-              <button class="in_btn">Tugatish va kredit berish</button>
+              <a class="in_btn" style="text-decoration: none;" href="{% url 'give_credit' credit_id %}">Tugatish va kredit berish</a>
             </div>
           </div>
     </div>
@@ -334,7 +334,7 @@
   <div class="footer">
     <button id="prev-btn" class="bt-nav-btn">Orqaga</button>
     <a style="text-decoration: none;" href="{% url 'home' %}" class="bt-nav-btn">Berkitish</a>
-    <button class="bt-nav-btn">Bekor qilish</button>
+    <a href="{% url 'reject_credit' credit_id %}" style="text-decoration: none;" class="bt-nav-btn">Bekor qilish</a>
     <button id="next-btn" class="bt-nav-btn">Tasqidlash</button>
   </div>
   

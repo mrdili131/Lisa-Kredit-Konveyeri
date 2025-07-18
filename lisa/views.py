@@ -90,3 +90,16 @@ def get_user(request):
     
 
 
+@login_required
+def give_credit(request,id):
+    credit = Credit.objects.get(id=id)
+    credit.status = 'done'
+    credit.save()
+    return redirect('home')
+
+@login_required
+def reject_credit(request,id):
+    credit = Credit.objects.get(id=id)
+    credit.status = 'rejected'
+    credit.save()
+    return redirect('home')

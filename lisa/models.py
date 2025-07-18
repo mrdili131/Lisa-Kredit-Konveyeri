@@ -1,30 +1,30 @@
 from django.db import models
 from users.models import User, Filial
 from django.core.validators import MinValueValidator, MaxValueValidator
-gender = {
+gender = [
     ('male','Erkak'),
     ('female','Ayol')
-}
+]
 
-id = {
+id = [
     ("id","ID passport"),
     ("old_pass","Eski turdagi passport"),
     ("drivers_license","Haydovchilik guvohnomasi")
-}
+]
 
-education = {
+education = [
     ("1","Oliy"),
     ("2","O‘rta"),
     ("3","O‘rta-maxsus"),
     ("4","Tuganlanmagan oliy"),
     ("5","Boshlang‘ich"),
-}
+]
 
-status = {
+status = [
     ('done','berildi'),
     ('rejected',"rad etildi"),
     ('pending','jarayonda')
-}
+]
 
 class Client(models.Model):
     # Client's data
@@ -32,7 +32,7 @@ class Client(models.Model):
     last_name = models.CharField(max_length=100,null=True,blank=True)
     middle_name = models.CharField(max_length=100,null=True,blank=True)
     gender = models.CharField(choices=gender,default='male',max_length=50)
-    education = models.CharField(choices=education,default="1",max_length=50)
+    education = models.CharField(choices=education,default="2",max_length=50)
     birth_date = models.DateField(null=True,blank=True)
     client_country = models.CharField(max_length=50,null=True,blank=True)
     client_region = models.CharField(max_length=50,null=True,blank=True)
