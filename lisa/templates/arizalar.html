@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa kredit konveyeri</title>
+    <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1><a href="{% url 'home' %}">Lisa Kredit konveyeri</a></h1>
+        <select name="" id="" onchange="send(this)">
+            <option value="/"><a href="">-------------------</a></option>
+            <option value="{% url 'to_konveyer' %}"><a href="{% url 'to_konveyer' %}">Arizani yuborish</a></option>
+            <option value="{% url 'arizalar' %}"><a href="{% url 'arizalar' %}">Arizalar tarixi</a></option>
+        </select>
+        <a href="{% url 'auth:logout' %}">{{user.first_name}} {{user.middle_name}} {{user.last_name}}</a>
+    </nav>
+    <div class="main">
+        <h1>Arizalar</h1>
+        <div class="ariza-container">
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Contract ID</td>
+                        <td>Sana</td>
+                        <td>FIO</td>
+                        <td>JSHSHIR</td>
+                        <td>Ariza miqdori</td>
+                        <td>Kredit maxsuloti</td>
+                        <td>Foidalanuvchi</td>
+                        <td>Filial</td>
+                        <td>Xolati</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in credits %}
+                    <tr>
+                        <th>#{{i.id}}</th>
+                        <th><a href="{% url 'konveyer' i.id %}">{{i.contract_id}}</a></th>
+                        <th>{{i.start_date}}</th>
+                        <th>{{i.client.last_name}} {{i.client.first_name}} {{i.client.middle_name}}</th>
+                        <th>{{i.client.passport_pinfl}}</th>
+                        <th>{{i.amount|intcomma}}</th>
+                        <th>{{i.application.name}}</th>
+                        <th>{{i.user.first_name}}</th>
+                        <th>{{i.filial.name}}</th>
+                        <th>{{i.status}}</th>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+<script>
+    function send(selected){
+        window.location.href = selected.value;
+    }
+</script>

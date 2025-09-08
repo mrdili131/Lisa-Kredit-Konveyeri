@@ -1,0 +1,66 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa kredit konveyeri</title>
+    <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1><a href="{% url 'home' %}">Lisa Kredit konveyeri</a></h1>
+        <select name="" id="">
+            <option value="/"><a href="">-------------------</a></option>
+            <option value="arizalar.html"><a href="{% url 'arizalar' %}">Arizalar tarixi</a></option>
+        </select>
+        <a href="">Dilmuhammad Sodirjon o‘g‘li Abduqodirov</a>
+    </nav>
+    <div class="main">
+        <form method="post">
+            {% csrf_token %}
+            {% for i in applications %}
+            <button class="application" value="{{i.id}}" name="app_btn" type="submit">
+                <h1>{{i.name}}</h1>
+                <p>Maks. miqdor: {{i.limit_amount|intcomma}}</p>
+                <p>Foiz stavkasi: {{i.rate}}</p>
+                <p>Maks. muddat: {{i.max_month}} oy</p>
+            </button>
+            {% endfor %}
+        </form>
+    </div>
+    
+</body>
+</html>
+
+
+<style>
+    .main{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .application{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: rgb(19, 170, 175);
+        box-shadow: 3px 3px 0 0 black;
+        padding: 10px;
+        border-radius: 12px;
+        color: white;
+    }
+    .application:active{
+        background-color: rgb(19, 170, 175);
+        box-shadow: 0 0 0 0 black;
+        padding: 10px;
+        border-radius: 12px;
+        color: white;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+</style>

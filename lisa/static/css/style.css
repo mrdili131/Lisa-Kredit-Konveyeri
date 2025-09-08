@@ -1,0 +1,222 @@
+:root{
+    --pm-color : rgb(20, 82, 107);
+    --box-bg : rgba(45, 83, 133, 0.418);
+  }
+  *{
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+
+
+
+  .first-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    justify-content:space-around;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .second-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .second-tab-data{
+    background-color: var(--box-bg);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+  .third-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .forth-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .fiveth-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .sixth-tab{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 100px;
+  }
+  .main-sixth-tab{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .sixth-tab-data{
+    background-color: var(--box-bg);
+    display: flex;
+    flex-direction: column;
+    flex-wrap:wrap;
+    gap: 20px;
+    padding: 20px;
+    color: white;
+    border-radius: 12px;
+  }
+  .row-data-view{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap:20px;
+    align-items: center;
+    border-bottom: 2px solid white;
+  }
+  .row-data-view h2{
+    font-size:23px;
+  }
+
+
+
+  nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--pm-color);
+    padding: 20px;
+  }
+  .credit-data{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+  }
+  .footer{
+    position: fixed;
+    bottom: 0;
+    left:0;
+    width:100%;
+    background-color: var(--pm-color);
+    z-index: 1000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  .bt-nav-btn{
+    padding: 10px;
+    font-size: 20px;
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 12px;
+    color:white;
+  }
+  .bt-nav-btn:hover{
+    padding: 10px;
+    font-size: 20px;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 12px;
+    color:black;
+  }
+  .nav-btn{
+    padding: 10px;
+    font-size: 25px;
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 12px;
+  }
+  .nav-btn:hover{
+    padding: 10px;
+    font-size: 25px;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(201, 201, 201);
+  }
+  .nav-btn.active{
+    padding: 10px;
+    font-size: 25px;
+    background-color: white;
+    color: black;
+    border: 2px solid rgb(201, 201, 201);
+  }
+  input{
+    padding: 10px;
+    border-radius: 12px;
+    border: 3px solid black;
+    font-size: 20px;
+  }
+  .in_btn{
+    padding: 10px;
+    font-size: 25px;
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 12px;
+  }
+  .in_btn:hover{
+    background-color: white;
+    color: rgb(0, 0, 0);
+    border: 2px solid blanchedalmond;
+  }
+  .input-item{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: bold;
+    color: white;
+  }
+
+  .tab{
+    display: none;
+  }
+
+  .tab.active{
+    display: block;
+  }
+
+  table{
+    border: 5px solid rgb(0, 0, 0);
+    padding: 5px;
+    border-radius: 13px;
+    background-color: rgb(193, 222, 255);
+    display: none;
+  }
+  th, td{
+    padding: 5px;
+    font-size: 20px;
+    border:1px solid black;
+    font-size: 25px;
+  }
+  .res{
+    border:2px solid green;
+    background-color: rgb(164, 221, 235);
+  }

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lisa kredit konveyeri</title>
+    <link rel="stylesheet" href="{% static 'css/index_style.css' %}">
+</head>
+<body>
+    <nav>
+        <h1>Lisa Kredit konveyeri</h1>
+    </nav>
+    <div class="main">
+        <div class="box-container">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h1>Kirish</h1>
+                <label for="">Username</label>
+                <input type="text" name="username">
+                <label for="">Password</label>
+                <input type="password" name="password">
+                <button type="submit">Kirish</button>
+            </form>
+        </div>
+        <p>2025 © "DIZENSTUDIOS" MChJ</p>
+    </div>
+    
+</body>
+</html>
+
+<style>
+    form{
+        display: flex;
+        flex-direction: column;
+        gap:20px;
+        font-size: 25px;
+    }
+    input{
+        padding: 5px;
+        font-size: 20px;
+        border-radius: 8px;
+    }
+    button{
+        color:white;
+        background-color: black;
+        font-size: 25px;
+        padding: 5px;
+        border-radius: 8px;
+    }
+    .box-container{
+        padding: 100px;
+        padding-top:20px;
+        margin-bottom: 10px;
+    }
+</style>
