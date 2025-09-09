@@ -77,73 +77,75 @@ def save_to_db(source):
             }
         )
     new_credit = Credit.objects.get(id=data['credit_id'])
-    if new_credit.client is not None:
+    if new_credit.client is None:
         new_client = Client.objects.get(passport_pinfl=data['passport_pinfl'])
+        new_credit.client = new_client
+        new_credit.save()
 
-        return {
-            "backend-data-response":{
-                    "credit":{
-                        "contract_id":new_credit.contract_id,
-                        "amount":float(new_credit.amount),
-                        "start_date":str(new_credit.start_date),
-                        "end_date":str(new_credit.end_date),
-                        "pay_day":new_credit.pay_day,
-                        "status":new_credit.status,
-                        "filial":new_credit.filial.name
-                    },
-                    "client":{
-                        "first_name" : new_client.first_name,
-                        "last_name" : new_client.last_name,
-                        "middle_name" : new_client.middle_name,
-                        "gender" : new_client.gender,
-                        "education" : new_client.education,
-                        "birth_date" : str(new_client.birth_date),
-                        "client_country" : new_client.client_country,
-                        "client_region" : new_client.client_region,
+    #     return {
+    #         "backend-data-response":{
+    #                 "credit":{
+    #                     "contract_id":new_credit.contract_id,
+    #                     "amount":float(new_credit.amount),
+    #                     "start_date":str(new_credit.start_date),
+    #                     "end_date":str(new_credit.end_date),
+    #                     "pay_day":new_credit.pay_day,
+    #                     "status":new_credit.status,
+    #                     "filial":new_credit.filial.name
+    #                 },
+    #                 "client":{
+    #                     "first_name" : new_client.first_name,
+    #                     "last_name" : new_client.last_name,
+    #                     "middle_name" : new_client.middle_name,
+    #                     "gender" : new_client.gender,
+    #                     "education" : new_client.education,
+    #                     "birth_date" : str(new_client.birth_date),
+    #                     "client_country" : new_client.client_country,
+    #                     "client_region" : new_client.client_region,
                         
-                        # Passport data
-                        "passport_type" : 'id',
-                        "passport_serial_letter" : new_client.passport_serial_letter,
-                        "passport_serial_number" : new_client.passport_serial_number,
-                        "passport_pinfl" : new_client.passport_pinfl,
-                        "passport_got_date" : str(new_client.passport_expiry_date),
-                        "passport_expiry_date" : str(new_client.passport_expiry_date),
-                        "passport_got_region" : new_client.passport_got_region,
-                        "passport_country" : new_client.passport_country,
+    #                     # Passport data
+    #                     "passport_type" : 'id',
+    #                     "passport_serial_letter" : new_client.passport_serial_letter,
+    #                     "passport_serial_number" : new_client.passport_serial_number,
+    #                     "passport_pinfl" : new_client.passport_pinfl,
+    #                     "passport_got_date" : str(new_client.passport_expiry_date),
+    #                     "passport_expiry_date" : str(new_client.passport_expiry_date),
+    #                     "passport_got_region" : new_client.passport_got_region,
+    #                     "passport_country" : new_client.passport_country,
 
-                        # Address data from goverment database
-                        "base_country" : new_client.base_country,
-                        "base_region" : new_client.base_region,
-                        "base_city" : new_client.base_city,
-                        "base_address" : new_client.base_address,
+    #                     # Address data from goverment database
+    #                     "base_country" : new_client.base_country,
+    #                     "base_region" : new_client.base_region,
+    #                     "base_city" : new_client.base_city,
+    #                     "base_address" : new_client.base_address,
 
-                        # Current address data
-                        "current_country" : new_client.base_country,
-                        "current_region" : new_client.base_region,
-                        "current_city" : new_client.base_city,
-                        "current_address" : new_client.base_address,
+    #                     # Current address data
+    #                     "current_country" : new_client.base_country,
+    #                     "current_region" : new_client.base_region,
+    #                     "current_city" : new_client.base_city,
+    #                     "current_address" : new_client.base_address,
 
-                        # Other data
-                        "description" : "",
-                        "filial" : new_client.filial.name,
+    #                     # Other data
+    #                     "description" : "",
+    #                     "filial" : new_client.filial.name,
 
-                    }
-                }
-            }
-    else:
-        return {
-            "backend-data-response":{
-                    "credit":{
-                        "contract_id":new_credit.contract_id,
-                        "amount":float(new_credit.amount),
-                        "start_date":str(new_credit.start_date),
-                        "end_date":str(new_credit.end_date),
-                        "pay_day":new_credit.pay_day,
-                        "status":new_credit.status,
-                        "filial":new_credit.filial.name
-                    }
-            }
-        }
+    #                 }
+    #             }
+    #         }
+    # else:
+    #     return {
+    #         "backend-data-response":{
+    #                 "credit":{
+    #                     "contract_id":new_credit.contract_id,
+    #                     "amount":float(new_credit.amount),
+    #                     "start_date":str(new_credit.start_date),
+    #                     "end_date":str(new_credit.end_date),
+    #                     "pay_day":new_credit.pay_day,
+    #                     "status":new_credit.status,
+    #                     "filial":new_credit.filial.name
+    #                 }
+    #         }
+    #     }
 
 
         

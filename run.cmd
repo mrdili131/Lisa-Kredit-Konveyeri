@@ -1,1 +1,1 @@
-..\venv\Scripts\activate && uvicorn conf.asgi:application --reload --port 8080
+..\venv\Scripts\activate && uvicorn conf.asgi:application --reload --port 8000

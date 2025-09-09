@@ -85,6 +85,10 @@
                 <input type="text" id="passport_pinfl" name="passport_pinfl" placeholder="JSHSHIR" value="{{credit.client.passport_pinfl}}">
               </div>
               <div class="input-item">
+                <label for="find-client-btn">Mijozni izlash</label>
+                <button class="find-client-btn" onclick="get_client()">Izlash</button>
+              </div>
+              <div class="input-item">
                 <label for="first_name">Ism</label>
                 <input type="text" id="first_name" name="first_name" placeholder="Ism" value="{{credit.client.first_name}}">
               </div>
@@ -99,8 +103,8 @@
               <div class="input-item">
                 <label for="gender">Jinsi</label>
                 <select name="gender" id="gender" class="form-select" style="font-size: 25px;">
-                  <option value="1">Erkak</option>
-                  <option value="2">Ayol</option>
+                  <option value="male" {% if credit.client.gender == "male" %}selected{%endif%}>Erkak</option>
+                  <option value="female" {% if credit.client.gender == "female" %}selected{%endif%}>Ayol</option>
                 </select>
               </div>
               <div class="input-item">
@@ -118,23 +122,23 @@
               <div class="input-item">
                 <label for="education">Ma‘lumoti</label>
                 <select name="education" id="education" style="font-size: 25px;">
-                  <option value="1">Oliy</option>
-                  <option value="2">O‘rta</option>
-                  <option value="3">O‘rta-maxsus</option>
-                  <option value="4">Tuganlanmagan oliy</option>
-                  <option value="5">Boshlang‘ich</option>
+                  <option value="1" {% if credit.client.education == "1" %}selected{% endif %}>Oliy</option>
+                  <option value="2" {% if credit.client.education == "2" %}selected{% endif %}>O‘rta</option>
+                  <option value="3" {% if credit.client.education == "3" %}selected{% endif %}>O‘rta-maxsus</option>
+                  <option value="4" {% if credit.client.education == "4" %}selected{% endif %}>Tuganlanmagan oliy</option>
+                  <option value="5" {% if credit.client.education == "5" %}selected{% endif %}>Boshlang‘ich</option>
                 </select>
               </div>
             </div>
             <h1>Shaxsni tasdiqlovchi hujjat ma'lumotlari</h1>
             <div class="second-tab-data">
               <div class="input-item">
-                <label for="serial">Passport seriyasi</label>
-                <input type="text" id="serial" name="serial" placeholder="AB" value="{{credit.client.passport_serial_letter}}">
+                <label for="passport_serial_letter">Passport seriyasi</label>
+                <input type="text" id="passport_serial_letter" name="passport_serial_letter" placeholder="AB" value="{{credit.client.passport_serial_letter}}">
               </div>
               <div class="input-item">
-                <label for="passport_serial_letter">Seriya raqami</label>
-                <input type="text" id="passport_serial_letter" name="passport_serial_letter" placeholder="1001200" value="{{credit.client.passport_serial_number}}">
+                <label for="passport_serial_number">Seriya raqami</label>
+                <input type="text" id="passport_serial_number" name="passport_serial_number" placeholder="1001200" value="{{credit.client.passport_serial_number}}">
               </div>
               <div class="input-item">
                 <label for="passport_got_date">Olingan sanasi</label>
@@ -213,30 +217,26 @@
           <div class="forth-tab">
             <div class="second-tab-data">
               <div class="input-item">
-                  <label for="num">Telefon raqam</label>
-                  <input type="text" id="num" name="num" style="width: 350px;" placeholder="94 139 07 72">
+                  <label for="num_number">Telefon raqam</label>
+                  <input type="text" id="num_number" name="num_number" style="width: 350px;" placeholder="94 139 07 72">
               </div>
               <div class="input-item">
-                  <label for="num_comment">Izoh</label>
-                  <input type="text" id="num_comment" name="num_comment" style="width: 350px;" placeholder="Birnimajon">
+                  <label for="num_name">Izoh</label>
+                  <input type="text" id="num_name" class="num_name" name="num_name" style="width: 350px;" placeholder="Birnimajon">
               </div>
-              <button class="in_btn">Saqlash</button>
+              <button class="in_btn" onclick="save_number()">Saqlash</button>
             </div>
-            <div class="second-tab-data">
-              <h1>94 139 07 72</h1>
-              <h1>Birnimajon</h1>
-              <button class="in_btn">O‘chirish</button>
+
+            <div id="numbers-holder">
+              {% for i in numbers %}
+              <div class="second-tab-data">
+                <h1>{{i.number}}</h1>
+                <h1>{{i.name}}</h1>
+                <button class="in_btn">O‘chirish</button>
+              </div>
+              {% endfor %}
             </div>
-            <div class="second-tab-data">
-              <h1>94 139 07 72</h1>
-              <h1>Birnimajon</h1>
-              <button class="in_btn">O‘chirish</button>
-            </div>
-            <div class="second-tab-data">
-              <h1>94 139 07 72</h1>
-              <h1>Birnimajon</h1>
-              <button class="in_btn">O‘chirish</button>
-            </div>
+
           </div>
     </div>
 
@@ -382,6 +382,8 @@
 
 </body>
 </html>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
 
@@ -579,12 +581,98 @@ function not_editable(){
 }
 
 
+// CSRF_TOKEN
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i=0; i<cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+// CSRF_TOKEN
+
+
+// Client get start
+
+function get_client(){
+  let pinfl = document.getElementById("passport_pinfl").value
+  if (pinfl){
+
+    $.ajax({
+      method:"POST",
+      url: "{% url 'get_user' %}",
+      data: {
+        pinfl: pinfl,
+        credit_id: "{{credit.id}}",
+        csrfmiddlewaretoken: getCookie("csrftoken")
+      },
+      success: function( result ) {
+        $( "#weather-temp" ).html( "<strong>" + result + "</strong> degrees" );
+        window.location.reload();
+      }
+    });
+
+  }
+}
+
+// Client get end
+
+
+
+// Save number start
+function save_number(){
+  let number = document.getElementById("num_number").value
+  let comment = document.getElementsByClassName("num_name")[0].value
+  let num_holder = document.getElementById("numbers-holder")
+  if (number && comment){
+    $.ajax({
+      method:"POST",
+      url: "{% url 'save_number' %}",
+      data: {
+        client: "{{credit.client.id}}",
+        number: number,
+        name: comment,
+        csrfmiddlewaretoken: getCookie("csrftoken")
+      },
+      success: function( result ) {
+        // $( "#weather-temp" ).add('')
+        if (result["status"] == true){
+          num_holder.innerHTML = ''
+          for (let i in result["numbers"]){
+            num_holder.innerHTML += `
+            <div class="second-tab-data">
+                <h1>${result["numbers"][i]}</h1>
+                <h1>${i}</h1>
+                <button class="in_btn">O‘chirish</button>
+            </div>
+            `
+          }
+        }
+      }
+    });
+  } else {
+    alert("Fill the fields")
+  }
+}
+// Save number end
+
 
 
 // On way logic
 
 if ("{{credit.status}}"=="done" || "{{credit.status}}"=="rejected"){
   not_editable()
+}
+
+if ("{{credit.start_date}}" || "{{credit.end_date}}"){
+  document.getElementById("make_graphic").click()
 }
 
 // On way logic end
@@ -627,7 +715,7 @@ function send_data(){
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     justify-content:space-around;
     padding: 20px;
     margin-bottom: 100px;
@@ -651,6 +739,7 @@ function send_data(){
     align-items: center;
     gap: 20px;
     padding: 20px;
+    color: white;
   }
   .third-tab{
     background-color: var(--box-bg);
@@ -713,6 +802,11 @@ function send_data(){
   }
   .row-data-view h2{
     font-size:23px;
+  }
+  #numbers-holder{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
   }
 
 
@@ -831,6 +925,26 @@ function send_data(){
   .res{
     border:2px solid green;
     background-color: rgb(164, 221, 235);
+  }
+  #graphic-holder{
+    overflow-x: scroll;
+    height: 35vw;
+  }
+  .find-client-btn{
+    background-color: rgb(201, 201, 201);
+    color: black;
+    border:3px solid black;
+    border-radius: 12px;
+    font-size: 20px;
+    padding: 10px;
+  }
+  .find-client-btn:hover{
+    background-color: black;
+    color: white;
+  }
+  .find-client-btn:active{
+    background-color: black;
+    color: white;
   }
 
 </style>

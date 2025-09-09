@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Credit, Application, Client
+from .models import Credit, Application, Client, PhoneNumber
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from users.models import User
@@ -31,7 +31,8 @@ class toKonveyer(LoginRequiredMixin,View):
 class KonveyerView(LoginRequiredMixin,View):
     def get(self,request,id):
         credit = Credit.objects.get(id=id)
-        return render(request,'konveyer.html',{"credit_id":credit.id,"credit":credit})
+        numbers = PhoneNumber.objects.filter(client_id=credit.client.id).order_by("id")
+        return render(request,'konveyer.html',{"credit_id":credit.id,"credit":credit,"numbers":numbers})
     
 class ArizalarView(LoginRequiredMixin,View):
     def get(self,request):
@@ -42,53 +43,40 @@ class ArizalarView(LoginRequiredMixin,View):
 @login_required
 def get_user(request):
     if request.method == 'POST':
-        pinfl = request.POST.get('pinfl')
         credit_id = request.POST.get('credit_id')
-        print(f'\n\n{pinfl}\n\n')
-        user = Client.objects.get(passport_pinfl=pinfl)
         credit = Credit.objects.get(id=credit_id)
-        data = {
-            # Client's data
-            "first_name":user.first_name,
-            "last_name":user.last_name,
-            "middle_name":user.middle_name,
-            "gender":user.gender,
-            "education":user.education,
-            "birth_date":str(user.birth_date),
-            "client_country":user.client_country,
-            "client_region":user.client_region,
-
-            # Passport data
-            "passport_type":user.passport_type,
-            "passport_serial_letter":user.passport_serial_letter,
-            "passport_serial_number":user.passport_serial_number,
-            "passport_pinfl":user.passport_pinfl,
-            "passport_got_date":user.passport_got_date,
-            "passport_expiry_date":user.passport_expiry_date,
-            "passport_got_region":user.passport_got_region,
-            "passport_country":user.passport_country,
-
-            # Address data from goverment database
-            "base_country":user.base_country,
-            "base_region":user.base_region,
-            "base_city":user.base_city,
-            "base_address":user.base_address,
-
-            # Current address data
-            "current_country":user.current_country,
-            "current_region":user.current_region,
-            "current_city":user.current_city,
-            "current_address":user.current_address,
-
-            # Other data
-            "description":user.description,
-            "filial":user.filial.name,
-        }
-        credit.client = user
-        credit.save()
-        return JsonResponse({"user":data})
+        try:
+            pinfl = request.POST.get('pinfl')
+            client = Client.objects.get(passport_pinfl=pinfl)
+            credit.client = client
+            credit.save()
+            return JsonResponse({"status":True})
+        except Client.DoesNotExist:
+            credit.client = None
+            credit.save()
+            return JsonResponse({"status":False})
     
 
+@login_required
+def save_number(request):
+    if request.method == 'POST':
+        number = request.POST.get('number')
+        client = request.POST.get('client')
+        name = request.POST.get('name')
+        client_obj = Client.objects.get(id=client)
+        if (number and client):
+            num = PhoneNumber(
+                number = number,
+                name = name,
+                client = client_obj
+            )
+            num.save()
+            numbers = PhoneNumber.objects.filter(client_id=client_obj.id).order_by("id")
+            nums = {}
+            for i in numbers:
+                nums[i.name] = number
+            return JsonResponse({"status":True,"numbers":nums})
+        return JsonResponse({"status":False})
 
 @login_required
 def give_credit(request,id):

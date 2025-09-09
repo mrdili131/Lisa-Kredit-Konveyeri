@@ -8,6 +8,7 @@ urlpatterns = [
     path('arizalar/',views.ArizalarView.as_view(),name='arizalar'),
     path('get_user/',views.get_user,name='get_user'),
     path('give_credit/<int:id>/',views.give_credit,name='give_credit'),
-    path('reject_credit/<int:id>/',views.reject_credit,name='reject_credit')
+    path('reject_credit/<int:id>/',views.reject_credit,name='reject_credit'),
+    path('save_number/',views.save_number,name='save_number')
 
 ]

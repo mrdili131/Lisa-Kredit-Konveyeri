@@ -41,7 +41,7 @@ class Client(models.Model):
     passport_type = models.CharField(choices=id,default="id",max_length=50,null=True,blank=True)
     passport_serial_letter = models.CharField(max_length=5,null=True,blank=True)
     passport_serial_number = models.CharField(max_length=10,null=True,blank=True)
-    passport_pinfl = models.CharField(max_length=50,null=True,blank=True)
+    passport_pinfl = models.CharField(max_length=50,unique=True,null=True,blank=True)
     passport_got_date = models.DateField(null=True,blank=True)
     passport_expiry_date = models.DateField(null=True,blank=True)
     passport_got_region = models.CharField(max_length=100,null=True,blank=True)
@@ -106,3 +106,12 @@ class Credit(models.Model):
     def __str__(self):
         if self.contract_id:
             return self.contract_id
+        
+
+class PhoneNumber(models.Model):
+    number = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    client = models.ForeignKey(Client,on_delete=models.SET_NULL,null=True,blank=True)
+
+    def __str__(self):
+        return f'{self.name} {self.number}'
