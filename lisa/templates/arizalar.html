@@ -19,12 +19,11 @@
         <a href="{% url 'auth:logout' %}">{{user.first_name}} {{user.middle_name}} {{user.last_name}}</a>
     </nav>
     <div class="main">
-        <h1>Arizalar</h1>
+        <h1 style="color: white;">Arizalar</h1>
         <div class="ariza-container">
             <table>
                 <thead>
                     <tr>
-                        <td>ID</td>
                         <td>Contract ID</td>
                         <td>Sana</td>
                         <td>FIO</td>
@@ -38,9 +37,8 @@
                 </thead>
                 <tbody>
                     {% for i in credits %}
-                    <tr>
-                        <th>#{{i.id}}</th>
-                        <th><a href="{% url 'konveyer' i.id %}">{{i.contract_id}}</a></th>
+                    <tr class="table-data-view">
+                        <th style="text-decoration: underline;color: rgb(255, 255, 255);"><a href="{% url 'konveyer' i.id %}">{{i.contract_id}}</a></th>
                         <th>{{i.start_date}}</th>
                         <th>{{i.client.last_name}} {{i.client.first_name}} {{i.client.middle_name}}</th>
                         <th>{{i.client.passport_pinfl}}</th>
@@ -48,7 +46,7 @@
                         <th>{{i.application.name}}</th>
                         <th>{{i.user.first_name}}</th>
                         <th>{{i.filial.name}}</th>
-                        <th>{{i.status}}</th>
+                        <th class="status_{{i.status}}">{% if i.status == "done" %}Bajarildi{% elif i.status == "pending" %}Jarayonda{% elif i.status == "rejected" %}Rad Etildi{% elif i.status == "paid" %}Yopilgan{% endif %}</th>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -64,3 +62,94 @@
         window.location.href = selected.value;
     }
 </script>
+
+<style>
+    :root{
+    --pm-color : rgb(20, 82, 107);
+    --box-bg : rgba(45, 83, 133, 0.418);
+  }
+  *{
+    margin: 0;
+    padding: 0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  body{
+    background-color: rgb(18, 148, 105);
+  }
+  nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: var(--pm-color);
+    padding: 20px;
+    font-size: 25px;
+    color: white;
+    border-bottom: 1px solid rgb(13, 51, 66);
+    align-items: center;
+  }
+  a{
+    color: white;
+    text-decoration: none;
+  }
+  select{
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-size: 25px;
+  }
+  option{
+    background-color: transparent;
+    color: black;
+  }
+  .main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    color: rgba(255, 255, 255, 0.842);
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+  .box-container{
+    background-color: rgb(16, 95, 69);
+    padding: 200px;
+    border-radius: 10px;
+    border: 5px solid rgb(11, 61, 44);
+  }
+  .ariza-container{
+
+  }
+  table{
+    margin-top: 20px;
+    background-color: rgb(28, 116, 86);
+    border: 5px solid rgb(197, 197, 197);
+    border-radius: 5px;
+  }
+  td,th{
+    border: 3px solid rgb(197, 197, 197);
+    padding: 10px;
+    font-size: 20px;
+    color: white;
+  }
+  .table-data-view{
+    border-radius: 13px;
+    background-color: rgb(78, 78, 78);
+  }
+  .status_rejected{
+    background-color: rgb(240, 79, 79);
+    border-radius: 12px;
+  }
+  .status_pending{
+    background-color: rgb(170, 182, 62);
+    border-radius: 12px;
+  }
+  .status_done{
+    background-color: rgb(52, 212, 87);
+    border-radius: 12px;
+  }
+  .status_paid{
+    background-color: rgb(180, 180, 180);
+    border-radius: 12px;
+  }
+</style>

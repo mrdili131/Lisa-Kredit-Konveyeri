@@ -21,7 +21,8 @@ class toKonveyer(LoginRequiredMixin,View):
         credit = Credit(
             user=request.user,
             filial=request.user.filial,
-            application = application
+            application = application,
+            rate = application.rate
         )
         credit.save()
         credit.contract_id = f'F13-{credit.id}'
@@ -31,8 +32,11 @@ class toKonveyer(LoginRequiredMixin,View):
 class KonveyerView(LoginRequiredMixin,View):
     def get(self,request,id):
         credit = Credit.objects.get(id=id)
-        numbers = PhoneNumber.objects.filter(client_id=credit.client.id).order_by("id")
-        return render(request,'konveyer.html',{"credit_id":credit.id,"credit":credit,"numbers":numbers})
+        try:
+            numbers = PhoneNumber.objects.filter(client_id=credit.client.id).order_by("id")
+            return render(request,'konveyer.html',{"credit_id":credit.id,"credit":credit,"numbers":numbers})
+        except AttributeError:
+            return render(request,'konveyer.html',{"credit_id":credit.id,"credit":credit})
     
 class ArizalarView(LoginRequiredMixin,View):
     def get(self,request):
@@ -74,20 +78,27 @@ def save_number(request):
             numbers = PhoneNumber.objects.filter(client_id=client_obj.id).order_by("id")
             nums = {}
             for i in numbers:
-                nums[i.name] = number
+                nums[i.name] = i.number
             return JsonResponse({"status":True,"numbers":nums})
         return JsonResponse({"status":False})
+
 
 @login_required
 def give_credit(request,id):
     credit = Credit.objects.get(id=id)
-    credit.status = 'done'
-    credit.save()
-    return redirect('home')
+    if credit.status != 'rejected' and credit.status != 'paid':
+        credit.status = 'done'
+        credit.save()
+        return redirect('home')
+    else:
+        return redirect('arizalar')
 
 @login_required
 def reject_credit(request,id):
     credit = Credit.objects.get(id=id)
-    credit.status = 'rejected'
-    credit.save()
-    return redirect('home')
+    if credit.status != 'done' and credit.status != 'paid':
+        credit.status = 'rejected'
+        credit.save()
+        return redirect('home')
+    else:
+        return redirect('arizalar')

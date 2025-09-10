@@ -23,7 +23,8 @@ education = [
 status = [
     ('done','berildi'),
     ('rejected',"rad etildi"),
-    ('pending','jarayonda')
+    ('pending','jarayonda'),
+    ('paid','yopilgan')
 ]
 
 class Client(models.Model):
@@ -92,6 +93,7 @@ class Credit(models.Model):
     application = models.ForeignKey(Application,on_delete=models.SET_NULL,null=True,blank=True)
     amount = models.DecimalField(max_digits=10,decimal_places=0,default=0)
     pay_day = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(31)],null=True,blank=True)
+    rate = models.IntegerField(null=True,blank=True)
 
     # Dates
     start_date = models.DateField(auto_now_add=True)

@@ -28,6 +28,7 @@ def save_to_db(source):
             "user" : user,
             "contract_id" : f"F13-{data['credit_id']}",
             "amount" : float(data['amount']),
+            "rate": data["credit_rate"],
             "start_date" : timify(data['start_date']),
             "end_date" : timify(data['end_date']),
             "pay_day" : if_null(data['pay_day']),
@@ -66,10 +67,10 @@ def save_to_db(source):
             "base_address" : data['base_address'],
 
             # Current address data
-            "current_country" : data['base_country'],
-            "current_region" : data['base_region'],
-            "current_city" : data['base_city'],
-            "current_address" : data['base_address'],
+            "current_country" : data['current_country'],
+            "current_region" : data['current_region'],
+            "current_city" : data['current_city'],
+            "current_address" : data['current_address'],
 
             # Other data
             "description" : "",

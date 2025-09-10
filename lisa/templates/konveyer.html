@@ -41,7 +41,7 @@
             <label for="pay_day">To‘lov kuni</label>
             <input type="number" name="pay_day" id="pay_day" placeholder="10" value="{{credit.pay_day}}">
             <label for="rate">Yillik foizi</label>
-            <input type="number" value="{{credit.application.rate}}" name="rate" id="credit_rate" placeholder="{{credit.application.rate}}%">
+            <input type="number" value="{{credit.rate}}" name="rate" id="credit_rate" placeholder="{{credit.rate}}%">
             <label for="fine">Jarima foizi</label>
             <input type="number" value="{{credit.application.fine}}" name="fine" id="fine" placeholder="{{credit.application.fine}}%">
             <button class="in_btn" id="make_graphic">Grafik yaratish</button>
@@ -191,20 +191,20 @@
               <h1>Joriy manzil ma'lumotlari</h1>
               <div class="second-tab-data">
                 <div class="input-item">
-                    <label for="base_country">Davlat</label>
-                    <input type="text" id="base_country" name="base_country" placeholder="O‘zbekiston" value="{{credit.client.base_country}}">
+                    <label for="current_country">Davlat</label>
+                    <input type="text" id="current_country" name="current_country" placeholder="O‘zbekiston" value="{{credit.client.current_country}}">
                 </div>
                 <div class="input-item">
-                    <label for="base_region">Viloyat</label>
-                    <input type="text" id="base_region" name="base_region" placeholder="Farg‘ona viloyati" value="{{credit.client.base_region}}">
+                    <label for="current_region">Viloyat</label>
+                    <input type="text" id="current_region" name="current_region" placeholder="Farg‘ona viloyati" value="{{credit.client.current_region}}">
                   </div>
                 <div class="input-item">
-                    <label for="base_city">Shahar(tuman)</label>
-                    <input type="text" id="base_city" name="base_city" placeholder="Farg‘ona shahri" value="{{credit.client.base_city}}">
+                    <label for="current_city">Shahar(tuman)</label>
+                    <input type="text" id="current_city" name="current_city" placeholder="Farg‘ona shahri" value="{{credit.client.current_city}}">
                 </div>
                 <div class="input-item">
-                    <label for="base_address">Manzil</label>
-                    <input type="text" id="base_address" name="base_address" style="width: 350px;" placeholder="Birnima MFY Birnima ko‘chasi 01-uy" value="{{credit.client.base_address}}">
+                    <label for="current_address">Manzil</label>
+                    <input type="text" id="current_address" name="current_address" style="width: 350px;" placeholder="Birnima MFY Birnima ko‘chasi 01-uy" value="{{credit.client.current_address}}">
                 </div>
               </div>
             </div>
@@ -228,13 +228,17 @@
             </div>
 
             <div id="numbers-holder">
-              {% for i in numbers %}
-              <div class="second-tab-data">
-                <h1>{{i.number}}</h1>
-                <h1>{{i.name}}</h1>
-                <button class="in_btn">O‘chirish</button>
-              </div>
-              {% endfor %}
+              {% if numbers %}
+                {% for i in numbers %}
+                <div class="second-tab-data">
+                  <h1>{{i.number}}</h1>
+                  <h1>{{i.name}}</h1>
+                  <button class="in_btn">O‘chirish</button>
+                </div>
+                {% endfor %}
+              {% else %}
+              <h2>Telefon raqam yo‘q</h2>
+              {% endif %}
             </div>
 
           </div>
@@ -286,7 +290,11 @@
                         </div>
                         <div class="row-data-view">
                           <p>TELEFON:</p>
-                          <h2>94 139 07 72</h2>
+                          {% if numbers %}
+                            <h2>{{numbers.0.number}}</h2>
+                          {% else %}
+                            <h2>Raqam yo‘q</h2>
+                          {% endif %}
                         </div>
                         <div class="row-data-view">
                           <p>KREDIT MAXSULOTI:</p>
@@ -302,7 +310,7 @@
                         </div>
                         <div class="row-data-view">
                           <p>KREDIT FOIZ STAVKASI:</p>
-                          <h2>{{credit.application.rate}}%</h2>
+                          <h2>{{credit.rate}}%</h2>
                         </div>
                       </div>
 
@@ -374,7 +382,7 @@
   <div class="footer">
     <button id="prev-btn" class="bt-nav-btn">Orqaga</button>
     <a style="text-decoration: none;" href="{% url 'home' %}" class="bt-nav-btn">Berkitish</a>
-    <button class="bt-nav-btn">Bekor qilish</button>
+    <a class="bt-nav-btn" href="{% url 'reject_credit' credit.id %}" style="text-decoration: none;">Bekor qilish</a>
     <button id="next-btn" class="bt-nav-btn" onclick="send_data()">Tasqidlash</button>
   </div>
   
@@ -385,8 +393,9 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<script>
 
+
+<script>
   // Ws
   let ws = new WebSocket(`ws://${window.location.host}/ws/`)
 
@@ -461,16 +470,27 @@
 
   next.addEventListener("click",()=>{
       let current_tab = document.querySelector('.tab.active')
-      if (current_tab){
-        const current_index = [...tabs].indexOf(current_tab)
-        const next_tab = current_index + 1
-        if (validate_fillings()==true){
-          if (next_tab <= tabs.length-1){
-            show_tab(next_tab)
-          }
+      let holder = document.getElementById("numbers-holder")
+      const current_index = [...tabs].indexOf(current_tab)
+      const next_tab = current_index + 1
+      if (current_tab.id=="telefon" && holder.querySelector(".second-tab-data")){
+        if (next_tab <= tabs.length-1){
+              show_tab(next_tab)
         }
       }
+      else if(current_tab.id=="karta"){
+        if (next_tab <= tabs.length-1){
+              show_tab(next_tab)
+        }
+      } else {
+          if (validate_fillings()==true){
+            if (next_tab <= tabs.length-1){
+              show_tab(next_tab)
+            }
+          }
+      }
   })
+
 
   prev.addEventListener("click",()=>{
     tabs.forEach((tab,index)=>{
@@ -482,6 +502,22 @@
     })
   })
   // Tabs end
+
+
+  // Same address start
+  function same_address(){
+    let base_country = document.getElementById("base_country").value;
+    let base_region = document.getElementById("base_region").value;
+    let base_city = document.getElementById("base_city").value;
+    let base_address = document.getElementById("base_address").value;
+    if (base_country,base_region,base_city,base_address){
+      document.getElementById("current_country").value = base_country;
+      document.getElementById("current_region").value = base_region;
+      document.getElementById("current_city").value = base_city;
+      document.getElementById("current_address").value = base_address;
+    }
+  }
+  // Same address end
 
 
 // Graphic start
@@ -645,10 +681,10 @@ function save_number(){
         // $( "#weather-temp" ).add('')
         if (result["status"] == true){
           num_holder.innerHTML = ''
-          for (let i in result["numbers"]){
+          for (let i in result.numbers){
             num_holder.innerHTML += `
             <div class="second-tab-data">
-                <h1>${result["numbers"][i]}</h1>
+                <h1>${result.numbers[i]}</h1>
                 <h1>${i}</h1>
                 <button class="in_btn">O‘chirish</button>
             </div>
